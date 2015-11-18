@@ -17,6 +17,7 @@ using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
+using AllReady.Security;
 
 namespace AllReady
 {
@@ -27,6 +28,7 @@ namespace AllReady
             // Setup configuration sources.
             var builder = new ConfigurationBuilder()
                 .SetBasePath(appEnv.ApplicationBasePath)
+                .AddJsonFile("version.json")
                 .AddJsonFile("config.json")
                 .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
@@ -58,10 +60,7 @@ namespace AllReady
                 .AddSqlServer()
                 .AddDbContext<AllReadyContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
-            services.Configure<AzureStorageSettings>(options =>
-            {
-                options.StorageAccount = Configuration["Data:Storage:AzureStorage"];
-            });
+            services.Configure<AzureStorageSettings>(Configuration.GetSection("Data:Storage"));
             services.Configure<DatabaseSettings>(Configuration.GetSection("Data:DefaultConnection"));
             services.Configure<EmailSettings>(Configuration.GetSection("Email"));
             services.Configure<SampleDataSettings>(Configuration.GetSection("SampleData"));
@@ -79,7 +78,13 @@ namespace AllReady
             });
 
             // Add Identity services to the services container.
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                    {
+                        options.Password.RequiredLength = 10;
+                        options.Password.RequireNonLetterOrDigit = false;
+                        options.Password.RequireDigit = true;
+                        options.Password.RequireUppercase = false;
+                    })
                      .AddEntityFrameworkStores<AllReadyContext>()
                      .AddDefaultTokenProviders();
 
@@ -232,6 +237,9 @@ namespace AllReady
                 {
                     options.AppId = Configuration["Authentication:Facebook:AppId"];
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    options.Scope.Add("email");
+                    options.BackchannelHttpHandler = new FacebookBackChannelHandler();
+                    options.UserInformationEndpoint = "https://graph.facebook.com/v2.5/me?fields=id,name,email,first_name,last_name";
                 });
             }
             // app.UseGoogleAuthentication();

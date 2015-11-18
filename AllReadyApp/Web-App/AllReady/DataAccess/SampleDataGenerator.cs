@@ -35,9 +35,6 @@ namespace AllReady.Models
                 _context.Skills.Any() ||
                 _context.Resources.Any())
             {
-                // Attempt to populate CampaignImpactTypes:
-                InsertCampaignImpactTypes(_context);
-                _context.SaveChanges();
                 return;
             }
             // new up some data
@@ -94,13 +91,22 @@ namespace AllReady.Models
                 ManagingTenant = htb
             };
             htb.Campaigns.Add(firePrev);
+            var smokeDetImpact = new CampaignImpact
+            {
+                ImpactType = ImpactType.Numeric,
+                NumericImpactGoal = 10000,
+                CurrentImpactLevel = 6722,
+                Display = true,
+                TextualImpactGoal = "Total number of smoke detectors installed."
+            };
+            _context.CampaignImpacts.Add(smokeDetImpact);
             Campaign smokeDet = new Campaign()
             {
                 Name = "Working Smoke Detectors Save Lives",
                 ManagingTenant = htb,
                 StartDateTimeUtc = DateTime.Today.AddMonths(-1).ToUniversalTime(),
                 EndDateTimeUtc = DateTime.Today.AddMonths(1).ToUniversalTime(),
-                
+                CampaignImpact = smokeDetImpact
             };
             htb.Campaigns.Add(smokeDet);
             Campaign financial = new Campaign()
@@ -407,21 +413,6 @@ namespace AllReady.Models
             return list;
         }
 
-        /// <summary>
-        /// Split this off from the InsertTestData function so we can call this
-        /// even if the "anti-database-pollution" logic bails due to pre-existing
-        /// database records. The reason for this is that we are preventing
-        /// duplicate records already.
-        /// </summary>
-        /// <param name="_context"></param>
-        private static void InsertCampaignImpactTypes(AllReadyContext _context)
-        {
-            var campaignImpactTypes = new List<CampaignImpactType>();
-            var existingImpactTypes = _context.CampaignImpactTypes.ToList();
-            var numeric = GetImpactType(campaignImpactTypes, existingImpactTypes, "Numeric");
-            var textual = GetImpactType(campaignImpactTypes, existingImpactTypes, "Textual");
-            _context.CampaignImpactTypes.AddRange(campaignImpactTypes);
-        }
 
         private static Skill GetSkill(List<Skill> skills, List<Skill> existingSkills, string skillName, Skill parentSkill = null, string description = null)
         {
@@ -441,22 +432,6 @@ namespace AllReady.Models
             }
             skill.Description = description;
             return skill;
-        }
-
-        private static CampaignImpactType GetImpactType(List<CampaignImpactType> types, List<CampaignImpactType> existingTypes, string typeName)
-        {
-            CampaignImpactType impactType;
-            if (existingTypes.Any(item => item.Name == typeName))
-            {
-                impactType = existingTypes.Single(item => item.Name == typeName);
-            }
-            else
-            {
-                impactType = new CampaignImpactType { Name = typeName };
-
-                types.Add(impactType);
-            }
-            return impactType;
         }
 
         #region Sample Data Helper methods

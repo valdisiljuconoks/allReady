@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - AllReady</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/src/bootstrap-tagsinput.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+        <link rel="stylesheet" href="//gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css"
+              asp-fallback-href="~/lib/bootstrap-toggle/css/bootstrap-toggle.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+
+    @*  remove me
+        this will be done via typescript / ES6 modules 
+            <script type="text/javascript">
+            var htbox = htbox || {};
+            htbox.allReady = htbox.allReady || {};
+            htbox.allReady.map = htbox.allReady.map || {};
+            htbox.allReady.init = htbox.allReady.init || {};
+        </script>*@
+</head>
+<body>
+    @*<div class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/Web-Logo-small.png" alt="Web Logo" /></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right main-nav">
+                        @await Html.PartialAsync("_AdminNavigationPartial")
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a asp-controller="Campaign" asp-action="Index">Campaigns</a></li>
+                        <li><a asp-controller="Tenant" asp-action="Index">Organizations</a></li>
+                        @await Html.PartialAsync("_LoginPartial")
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+
+    <header>
+        @*<div style="padding: 0 20px;">
+                @await Html.PartialAsync("_LoginPartial")
+            </div>*@
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/Web-Logo-small.png" alt="Web Logo" /></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a href="http://www.htbox.org/blog/">Blog</a></li>
+                        <li><a asp-controller="Campaign" asp-action="Index">Campaigns</a></li>
+                        <li><a asp-controller="Tenant" asp-action="Index">Organizations</a></li>
+                        @await Html.PartialAsync("_AdminNavigationPartial")
+                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid body-content">
+        @RenderBody()
+        <footer>
+            <p class="text-center">
+                <img src="~/images/fb-small.png" alt="Like Humanitarian Toolbox on Facebook" />
+                <a href="https://twitter.com/htbox"><img src="~/images/twitter-small.png" alt="Follow Humanitarian Toolbox on Twitter" /></a>
+                <img src="~/images/instagram-small.png" alt="Instagram account" />
+                <img src="~/images/youtube-small.png" alt="YouTube" />
+            </p>
+            <p class="text-center">Powered by <br /><a href="http://www.htbox.org/">Humanitarian Toolbox</a></p>
+
+        </footer>
+    </div>
+    @await Html.PartialAsync("_Version")
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.js"></script>
+        <script src="~/lib/knockout/dist/knockout.js"></script>
+        <script src="~/lib/moment/moment.js"></script>
+        <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="~/lib/tota11y/build/tota11y.js"></script>
+        <script src="~/lib/tinymce/tinymce.js"></script>
+        <script src="~/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+        <script src="~/lib/d3/d3.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+        <script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="//gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"
+                asp-fallback-src="~/lib/bootstrap-toggle/js/bootstrap-toggle.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.bootstrapToggle">
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"
+                asp-fallback-src="~/lib/moment/moment.js"
+                asp-fallback-test="window.moment">
+        </script>
+        <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="//ajax.aspnetcdn.com/ajax/bootstrap-touch-carousel/0.8.0/js/bootstrap-touch-carousel.js"
+                asp-fallback-src="~/lib/bootstrap-touch-carousel/dist/js/bootstrap-touch-carousel.js"
+                asp-fallback-test="window.Hammer && window.Hammer.Instance">
+        </script>
+        <script src="//tinymce.cachefly.net/4.2.6/tinymce.min.js"
+                asp-fallback-src="~/lib/tinymce/tinymce.js">
+        </script>
+        <script src="//d3js.org/d3.v3.min.js"
+                asp-fallback-src="~/lib/d3/d3.js">
+        </script>
+<<<<<<< 8e5f80a6a2ee9b0bda2677b5bccd9293f5eb9360
+=======
+        
+>>>>>>> Add thermometer visualization
+    </environment>
+    <script src="~/lib/knockout-bootstrap/src/knockout-bootstrap.js"></script>
+    <script src="~/lib/system.js/dist/system.js"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/js/ko.filterableList.js" asp-append-version="true"></script>
+    <script src="~/js/ko.validation.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            $(".datepicker").datetimepicker({
+                format: 'L',
+                showClose: false,
+                toolbarPlacement: 'bottom'
+            });
+            $(".datetimepicker").datetimepicker({
+                format: 'L LT',
+                showClose: false,
+                sideBySide: true,
+                toolbarPlacement: 'bottom'
+            });
+            tinymce.init({
+                selector: '.wysiwyg',
+                plugins: [
+							"advlist autolink lists link image charmap print preview anchor",
+							"searchreplace visualblocks code fullscreen",
+							"insertdatetime media table contextmenu paste imagetools"
+                ],
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image",
+                autosave_ask_before_unload: false
+            });
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
